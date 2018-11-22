@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://10.250.23.236/jmev?useUnicode=true&characterEncoding=utf8&userSSL=false
+  data:
+    mongodb:
+      uri: mongodb://10.250.23.236/jmev
+  redis:
+    cluster:
+      nodes: 10.250.23.236:7000,10.250.23.236:7001,10.250.23.236:7002
+      max-redirects: 6
+  kafka:
+    bootstrap-servers: 10.250.23.236:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: test-consumer-1
+      enable-auto-commit: true
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer

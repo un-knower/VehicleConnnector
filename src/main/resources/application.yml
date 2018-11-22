@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: dev
+
+netty:
+  server:
+    ip: 10.250.23.90
+    port: 60000
+    heartBeatReadTimeout: 30
+    businessThreadSize: 16
+
+server:
+  port: 80
