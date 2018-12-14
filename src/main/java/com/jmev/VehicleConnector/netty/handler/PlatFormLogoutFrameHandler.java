@@ -16,14 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 @FrameProcessor
 public class PlatFormLogoutFrameHandler implements FrameHandler {
 
-    /**
-     * 平台登出数据帧标示
-     */
-    private final int PLATFORM_LOGOUT = FrameType.PLATFORM_LOGOUT.getValue();
-
     @Override
     public boolean support(BaseFrame frame) {
-        return PLATFORM_LOGOUT == frame.getCommandSymbol();
+        return FrameType.PLATFORM_LOGOUT == frame.getCommandSymbol();
     }
 
     @Override

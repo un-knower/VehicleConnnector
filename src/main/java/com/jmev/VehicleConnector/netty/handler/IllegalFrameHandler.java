@@ -18,7 +18,7 @@ public class IllegalFrameHandler implements FrameHandler {
 
     @Override
     public boolean support(BaseFrame frame) {
-        return !frame.isAvailable();
+        return frame.unavailable();
     }
 
     @Override

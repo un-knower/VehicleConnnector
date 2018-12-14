@@ -16,14 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 @FrameProcessor
 public class ArgsSetupFrameHandler implements FrameHandler {
 
-    /**
-     * 参数设置数据帧标示
-     */
-    private final int ARGS_SETUP = FrameType.ARGS_SETUP.getValue();
-
     @Override
     public boolean support(BaseFrame frame) {
-        return ARGS_SETUP == frame.getCommandSymbol();
+        return FrameType.ARGS_SETUP == frame.getCommandSymbol();
     }
 
     @Override

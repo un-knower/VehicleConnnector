@@ -5,6 +5,7 @@ import com.jmev.VehicleConnector.entity.Response;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -29,8 +30,8 @@ import java.util.Optional;
 @RequestMapping(value = "vehicleCommand", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class VehicleCommandController {
 
-    @Resource
-    private RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private ReactiveRedisTemplate<String, String> redisTemplate;
 
     @Autowired
     private KafkaTemplate<String,String> kafkaTemplate;
@@ -38,19 +39,30 @@ public class VehicleCommandController {
     @Autowired
     private ReactiveMongoTemplate mongoTemplate;
 
-    @RequestMapping("ping/{name}")
-    public Response<String> test(@PathVariable String name) {
-        redisTemplate.opsForValue().set("name", name, Duration.ofSeconds(5));
+    @RequestMapping("test")
+    public String test() throws InterruptedException {
+        Thread.sleep(Duration.ofSeconds(5).toMillis());
 
-        return Response.success("pong");
+        return "test";
     }
 
 
-    @RequestMapping("redis")
-    public Response<String> test1() {
-        String name = redisTemplate.opsForValue().get("name");
+    @RequestMapping("redis/{value}")
+    public Mono<Response<String>> test3(@PathVariable String value){
+        return redisTemplate.opsForValue().set("name",value,Duration.ofSeconds(10))
+                .map(e -> {
+                    if (e) {
+                        return Response.success(null);
+                    }
 
-        return Response.success(name);
+                    return Response.failure("操作失败");
+                });
+    }
+
+    @RequestMapping("redis")
+    public Mono<Response<String>> test1() {
+        return redisTemplate.opsForValue().get("name")
+                .map(Response::success);
     }
 
 

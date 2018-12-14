@@ -13,10 +13,12 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import io.netty.util.concurrent.EventExecutorGroup;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import java.time.Duration;
 
 /**
  * netty服务启动类
@@ -24,7 +26,7 @@ import org.springframework.stereotype.Component;
  * @author Jun
  * @date 2018-11-16 12:54
  */
-@Setter
+@Data
 @Component
 @ConfigurationProperties(prefix = "netty.server")
 public final class NettyServerInitializer {
@@ -39,11 +41,8 @@ public final class NettyServerInitializer {
     /** 服务器绑定ip */
     private String ip;
 
-    /** 心跳超时，单位秒 */
-    private int heartBeatReadTimeout;
-
-    /** 业务线程池大小 */
-    private int businessThreadSize;
+    /** 心跳超时 */
+    private Duration heartBeatReadTimeout;
 
     /** 业务处理器 */
     @Autowired
@@ -60,11 +59,11 @@ public final class NettyServerInitializer {
      * @throws InterruptedException
      */
     public void start() throws InterruptedException {
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        EventLoopGroup bossGroup = new NioEventLoopGroup(4);
         EventLoopGroup workGroup = new NioEventLoopGroup();
 
         //业务执行线程池
-        final EventExecutorGroup eventExecutors = new DefaultEventExecutorGroup(businessThreadSize,
+        final EventExecutorGroup eventExecutors = new DefaultEventExecutorGroup(Runtime.getRuntime().availableProcessors(),
                 new DefaultThreadFactory("BusinessEventExecutor"));
         try {
             ServerBootstrap b = new ServerBootstrap();
@@ -81,7 +80,7 @@ public final class NettyServerInitializer {
 
                             pipeline.addLast(vehicleFrameEncoder);
                             pipeline.addLast(new VehicleFrameDecoder(MAX_FRAME_LENGTH));
-                            pipeline.addLast(new ReadTimeoutHandler(heartBeatReadTimeout));
+                            pipeline.addLast(new ReadTimeoutHandler((int) heartBeatReadTimeout.getSeconds()));
                             pipeline.addLast(eventExecutors,vehicleBusinessHandler);
                         }
                     });

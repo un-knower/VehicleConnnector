@@ -16,14 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 @FrameProcessor
 public class ResendFrameHandler implements FrameHandler {
 
-    /**
-     * 补发数据帧标示
-     */
-    private final int RESEND = FrameType.RESEND.getValue();
-
     @Override
     public boolean support(BaseFrame frame) {
-        return RESEND == frame.getCommandSymbol();
+        return FrameType.RESEND == frame.getCommandSymbol();
     }
 
     @Override

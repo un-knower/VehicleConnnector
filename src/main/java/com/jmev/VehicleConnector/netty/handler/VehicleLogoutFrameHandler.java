@@ -19,28 +19,28 @@ import java.util.Arrays;
 @FrameProcessor
 public class VehicleLogoutFrameHandler implements FrameHandler {
 
-    /**
-     * 车辆登出数据帧标示
-     */
-    private final int VEHICLE_LOGOUT = FrameType.VEHICLE_LOGOUT.getValue();
-
     @Override
     public boolean support(BaseFrame frame) {
-        return VEHICLE_LOGOUT == frame.getCommandSymbol();
+        return FrameType.VEHICLE_LOGOUT == frame.getCommandSymbol();
     }
 
     @Override
     public void process(ChannelHandlerContext ctx, BaseFrame frame) {
         log.info("车辆登出接口被调用");
 
-        //解析数据，获取登录数据帧
+        //解析数据，获取登出数据帧
         VehicleLogoutUpFrame logoutFrame = vehicleLogoutUpFrameAssembly(frame);
 
-        log.info("VIN：{}的车辆上传了数据", frame.getVin());
+        log.info("VIN：{}的车辆登出", frame.getVin());
         System.out.println(logoutFrame);
+
+        //关闭连接
+        ctx.close();
     }
 
     /**
+     * 车辆登出数据帧解析
+     *
      * @param frame 完整数据帧
      * @return
      */

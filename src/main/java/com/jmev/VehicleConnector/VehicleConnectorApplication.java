@@ -16,5 +16,4 @@ public class VehicleConnectorApplication {
         NettyServerInitializer server = ctx.getBean(NettyServerInitializer.class);
         server.start();
 	}
-
 }

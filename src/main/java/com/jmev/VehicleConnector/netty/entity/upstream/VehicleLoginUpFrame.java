@@ -1,7 +1,7 @@
 package com.jmev.VehicleConnector.netty.entity.upstream;
 
 import com.jmev.VehicleConnector.netty.entity.BaseFrame;
-import com.jmev.VehicleConnector.utils.ByteUtils;
+import com.jmev.VehicleConnector.util.ByteUtils;
 import io.netty.util.CharsetUtil;
 import lombok.Data;
 
@@ -66,7 +66,6 @@ public final class VehicleLoginUpFrame {
     public int getBatteryNum(){
         return 0xff & batteryNumByte;
     }
-
 
     public int getBatteryCodeLength(){
         return 0xff & batteryCodeLengthByte;

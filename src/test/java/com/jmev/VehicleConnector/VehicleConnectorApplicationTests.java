@@ -1,19 +1,21 @@
 package com.jmev.VehicleConnector;
 
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 
 /*@RunWith(SpringRunner.class)
-@SpringBootTest*/
+@SpringBootTest
+@Slf4j*/
 public class VehicleConnectorApplicationTests {
 
-    @Test
-    public void contextLoads() {
+    @Autowired
+    private ReactiveRedisTemplate<String,String> reactiveRedisTemplate;
 
+
+    @Test
+    public void contextLoads() throws InterruptedException {
+        System.out.println((byte)0xdc);
     }
 
 }

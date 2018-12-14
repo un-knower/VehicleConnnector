@@ -67,7 +67,7 @@ public final class VehicleBusinessHandler extends SimpleChannelInboundHandler<Ba
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (cause instanceof ReadTimeoutException) {
-
+            log.error(cause.getMessage(),cause);
         } else {
             log.error(cause.getMessage(), cause);
         }

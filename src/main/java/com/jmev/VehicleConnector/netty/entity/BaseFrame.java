@@ -2,8 +2,8 @@ package com.jmev.VehicleConnector.netty.entity;
 
 import com.jmev.VehicleConnector.common.constant.ResponseSymbolType;
 import com.jmev.VehicleConnector.exception.IllegalFrameException;
-import com.jmev.VehicleConnector.utils.BCCUtils;
-import com.jmev.VehicleConnector.utils.ByteUtils;
+import com.jmev.VehicleConnector.util.BCCUtils;
+import com.jmev.VehicleConnector.util.ByteUtils;
 import io.netty.util.CharsetUtil;
 import lombok.Data;
 import lombok.Setter;
@@ -131,11 +131,11 @@ public final class BaseFrame {
     }
 
     /**
-     * 数据帧BCC（异或校验）校验,主要校验数据帧的前缀和BCC码
+     * 数据帧BCC（异或校验）校验,主要校验数据帧的前缀和BCC
      *
-     * @return true 数据校验通过
+     * @return <b>true</b>, 数据校验通过
      */
-    public boolean isAvailable() {
+    public boolean unavailable() {
         //先判断数据完整性，bccCodeByte无法判断，因为其初始化为 0x00，数据也有可能为 0x00
         if (
                 framePrefixByte == null ||  //前缀不能为空
@@ -146,20 +146,20 @@ public final class BaseFrame {
                         encryptionTypeByte == 0x00 || //加密方式不能为 0x00
                         dataUnitLengthByte == null //数据长度不能为空
         ) {
-            return false;
+            return true;
         }
 
         //当数据单元长度为不为0时，校验数据单元完整性
         if (getDataUnitLength() > 0 && dataUnitByte == null) {
-            return false;
+            return true;
         }
 
         //前缀 {0x23,0x23}
         if (!(framePrefixByte[0] == 0x23 && framePrefixByte[1] == 0x23)) {
-            return false;
+            return true;
         }
 
-        return BCCUtils.bccCalculate(originFrameByte, true) == bccCodeByte;
+        return BCCUtils.bccCalculate(originFrameByte, true) != bccCodeByte;
     }
 
 
@@ -309,7 +309,7 @@ public final class BaseFrame {
 
             //检查构建后数据帧的有效性
             BaseFrame baseFrame = new BaseFrame(this);
-            if (!baseFrame.isAvailable()) {
+            if (baseFrame.unavailable()) {
                 throw new IllegalFrameException("无效数据帧", baseFrame);
             }
 
@@ -318,13 +318,13 @@ public final class BaseFrame {
     }
 
     /**
-     * 命令数据帧转为响应数据帧
+     * <h2>命令数据帧转为响应数据帧</h2>
+     * 根据国标定义，响应数据只需要修改原数据帧的应答标志和重新计算bcc即可。
      * <p>
-     * 根据国标定义，响应数据只需要修改原数据帧的应答标志和重新计算bcc即可
-     * <pre>
      * 转换步骤：
-     *      1、改变应答标志
-     *      2、重新计算<b>bcc</b>
+     * <pre>
+     *  1、改变应答标志
+     *  2、重新计算<b>bcc</b>
      * </pre>
      *
      * @param responseSymbolType 响应的类型

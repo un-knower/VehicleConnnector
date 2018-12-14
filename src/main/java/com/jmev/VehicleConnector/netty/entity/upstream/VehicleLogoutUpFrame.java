@@ -1,7 +1,7 @@
 package com.jmev.VehicleConnector.netty.entity.upstream;
 
 import com.jmev.VehicleConnector.netty.entity.BaseFrame;
-import com.jmev.VehicleConnector.utils.ByteUtils;
+import com.jmev.VehicleConnector.util.ByteUtils;
 import lombok.Data;
 
 import java.time.LocalDateTime;

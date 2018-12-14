@@ -16,15 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 @FrameProcessor
 public class TimeCorrectFrameHandler implements FrameHandler {
 
-    /**
-     * 终端校时数据帧标示
-     */
-    private final int TIME_CORRECT = FrameType.TIME_CORRECT.getValue();
-
-
     @Override
     public boolean support(BaseFrame frame) {
-        return TIME_CORRECT == frame.getCommandSymbol();
+        return FrameType.TIME_CORRECT == frame.getCommandSymbol();
     }
 
     @Override

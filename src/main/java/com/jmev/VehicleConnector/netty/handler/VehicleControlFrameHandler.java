@@ -16,15 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 @FrameProcessor
 public class VehicleControlFrameHandler implements FrameHandler {
 
-    /**
-     * 车辆控制数据帧处理器
-     */
-    private final int VEHICLE_CONTROL = FrameType.VEHICLE_CONTROL.getValue();
-
-
     @Override
     public boolean support(BaseFrame frame) {
-        return VEHICLE_CONTROL == frame.getCommandSymbol();
+        return FrameType.VEHICLE_CONTROL == frame.getCommandSymbol();
     }
 
     @Override

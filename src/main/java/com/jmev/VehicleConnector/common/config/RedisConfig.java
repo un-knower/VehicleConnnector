@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
-import org.springframework.data.redis.connection.RedisClusterConnection;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
 
 import java.time.Duration;
 
@@ -25,7 +26,7 @@ public class RedisConfig {
     private RedisProperties redisProperties;
 
     @Bean
-    public RedisConnectionFactory reactiveRedisConnectionFactory(){
+    public ReactiveRedisConnectionFactory reactiveRedisConnectionFactory(){
         ClusterTopologyRefreshOptions topologyRefreshOptions = ClusterTopologyRefreshOptions
                 .builder()
                 .enableAdaptiveRefreshTrigger(ClusterTopologyRefreshOptions.RefreshTrigger.MOVED_REDIRECT,
@@ -52,7 +53,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisClusterConnection redisClusterConnection(RedisConnectionFactory redisConnectionFactory){
-        return redisConnectionFactory.getClusterConnection();
+    public ReactiveRedisTemplate<String,String> reactiveRedisTemplate(ReactiveRedisConnectionFactory reactiveRedisConnectionFactory){
+        return new ReactiveRedisTemplate<>(reactiveRedisConnectionFactory, RedisSerializationContext.string());
     }
 }

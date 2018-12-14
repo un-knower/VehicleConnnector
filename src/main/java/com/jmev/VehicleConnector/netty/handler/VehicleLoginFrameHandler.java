@@ -20,14 +20,9 @@ import java.util.Arrays;
 @FrameProcessor
 public class VehicleLoginFrameHandler implements FrameHandler {
 
-    /**
-     * 车辆登录数据帧标示
-     */
-    private final int VEHICLE_LOGIN = FrameType.VEHICLE_LOGIN.getValue();
-
     @Override
     public boolean support(BaseFrame frame) {
-        return VEHICLE_LOGIN == frame.getCommandSymbol();
+        return FrameType.VEHICLE_LOGIN == frame.getCommandSymbol();
     }
 
     @Override
@@ -35,7 +30,7 @@ public class VehicleLoginFrameHandler implements FrameHandler {
         //解析数据，获取登录数据帧
         VehicleLoginUpFrame vehicleLoginUpFrame = vehicleLoginUpFrameAssembly(frame);
 
-        System.out.println(vehicleLoginUpFrame);
+        log.info(vehicleLoginUpFrame.getBatteryCode());
 
         ctx.writeAndFlush(frame.requestToResponse(ResponseSymbolType.SUCCESS));
     }
@@ -73,9 +68,9 @@ public class VehicleLoginFrameHandler implements FrameHandler {
 
         //可充电储能系统编码,只有当编码长度不为0时才需要解析
         //todo 当上传的数据存在多个子系统时，如何解析？
-        if (loginFrame.getCessCodeLength() != 0) {
+        if (loginFrame.getBatteryCodeLength() != 0) {
             byte[] bytes = Arrays.copyOfRange(data, 30,
-                    loginFrame.getCessNum() * loginFrame.getCessCodeLength());
+                    loginFrame.getBatteryNum() * loginFrame.getBatteryCodeLength());
             loginFrame.setBatteryCodeByte(bytes);
         }
 

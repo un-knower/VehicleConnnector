@@ -16,15 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 @FrameProcessor
 public class HeartBeatFrameHandler implements FrameHandler {
 
-    /**
-     * 心跳帧识别标示
-     */
-    private final int HEARTBEAT_SYMBOL = FrameType.HEARTBEAT.getValue();
-
-
     @Override
     public boolean support(BaseFrame frame) {
-        return HEARTBEAT_SYMBOL == frame.getCommandSymbol();
+        return FrameType.HEARTBEAT == frame.getCommandSymbol();
     }
 
     @Override

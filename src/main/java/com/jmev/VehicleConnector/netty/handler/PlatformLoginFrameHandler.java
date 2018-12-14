@@ -16,14 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 @FrameProcessor
 public class PlatformLoginFrameHandler implements FrameHandler {
 
-    /**
-     * 平台登录数据帧标示
-     */
-    private final int PLATFORM_LOGIN = FrameType.PLATFORM_LOGIN.getValue();
-
     @Override
     public boolean support(BaseFrame frame) {
-        return PLATFORM_LOGIN == frame.getCommandSymbol();
+        return FrameType.PLATFORM_LOGIN == frame.getCommandSymbol();
     }
 
     @Override

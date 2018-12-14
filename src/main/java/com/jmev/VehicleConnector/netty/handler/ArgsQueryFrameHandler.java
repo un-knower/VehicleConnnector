@@ -16,14 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 @FrameProcessor
 public class ArgsQueryFrameHandler implements FrameHandler {
 
-    /**
-     * 参数查询数据帧标示
-     */
-    private final int ARGS_QUERY = FrameType.ARGS_QUERY.getValue();
-
     @Override
     public boolean support(BaseFrame frame) {
-        return ARGS_QUERY == frame.getCommandSymbol();
+        return FrameType.ARGS_QUERY == frame.getCommandSymbol();
     }
 
     @Override

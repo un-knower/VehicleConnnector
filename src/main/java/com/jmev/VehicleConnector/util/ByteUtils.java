@@ -1,4 +1,4 @@
-package com.jmev.VehicleConnector.utils;
+package com.jmev.VehicleConnector.util;
 
 import java.time.LocalDateTime;
 

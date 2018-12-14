@@ -1,4 +1,4 @@
-package com.jmev.VehicleConnector.utils;
+package com.jmev.VehicleConnector.util;
 
 /**
  * BCC（数据异或校验）
@@ -28,7 +28,7 @@ public class BCCUtils {
             bcc = target[2];
 
             if (jumpLastByte) {
-                //去掉开头的[0x23,0x23],最后的bcc码
+                //去掉开头的[0x23,0x23]及最后的bcc码
                 for (int i = 3; i < len - 1; i++) {
                     bcc ^= target[i];
                 }
